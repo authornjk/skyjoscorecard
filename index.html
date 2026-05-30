@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Skyjo">
+  <meta name="theme-color" content="#047A6A">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Skyjo — Kyle vs Nicole</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <div class="header"><h1>SKYJO</h1><div class="sub">Kyle vs Nicole</div></div>
+  <div class="dealer-bar" id="dealer-bar">
+    <span class="dlbl">Dealer:</span><span class="dname" id="dealer-name">—</span><span class="dbadge">🃏</span>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('game')">Game</div>
+    <div class="tab" onclick="switchTab('record')">Record</div>
+    <div class="tab" onclick="switchTab('history')">History</div>
+  </div>
+  <div class="wrap" id="main-wrap">
+    <canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+
+    <div id="tab-game" class="screen active">
+      <div class="scoreboard">
+        <div class="player-card selected" id="card-kyle" onclick="selectPlayer('kyle')">
+          <div class="p-name" id="pname-kyle">Kyle</div>
+          <div class="ptotal" id="kyle-total">0</div>
+          <div class="p-tag" id="kyle-tag"></div>
+        </div>
+        <div class="player-card" id="card-nicole" onclick="selectPlayer('nicole')">
+          <div class="p-name" id="pname-nicole">Nicole</div>
+          <div class="ptotal" id="nicole-total">0</div>
+          <div class="p-tag" id="nicole-tag"></div>
+        </div>
+      </div>
+
+      <div class="keypad-wrap">
+        <div class="kp-who" id="kp-who">Kyle · Round 1</div>
+        <div class="kp-display" id="kp-display">—</div>
+        <div class="kp-grid">
+          <button class="kp-btn" onclick="kp('7')">7</button>
+          <button class="kp-btn" onclick="kp('8')">8</button>
+          <button class="kp-btn" onclick="kp('9')">9</button>
+          <button class="kp-btn" onclick="kp('4')">4</button>
+          <button class="kp-btn" onclick="kp('5')">5</button>
+          <button class="kp-btn" onclick="kp('6')">6</button>
+          <button class="kp-btn" onclick="kp('1')">1</button>
+          <button class="kp-btn" onclick="kp('2')">2</button>
+          <button class="kp-btn" onclick="kp('3')">3</button>
+          <button class="kp-btn neg" onclick="kpNeg()">+/−</button>
+          <button class="kp-btn" onclick="kp('0')">0</button>
+          <button class="kp-btn action" onclick="kpBack()">⌫</button>
+          <button class="kp-btn action cancel-edit" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none">Cancel</button>
+          <button class="kp-btn action" id="clear-btn" onclick="kpClear()">C</button>
+          <button class="kp-btn enter" id="enter-btn" onclick="kpEnter()" style="grid-column:2/4">Enter</button>
+        </div>
+      </div>
+
+      <div id="rounds-section" style="display:none">
+        <div class="rounds-hdr">
+          <span>Rounds</span>
+          <span class="edit-hint">Tap a score to fix it</span>
+        </div>
+        <table class="round-table" id="round-table">
+          <thead>
+            <tr>
+              <th style="text-align:left">#</th>
+              <th>Kyle</th>
+              <th style="color:#888;font-size:10px;font-weight:700">left</th>
+              <th>Nicole</th>
+              <th style="color:#888;font-size:10px;font-weight:700">left</th>
+            </tr>
+          </thead>
+          <tbody id="round-tbody"></tbody>
+        </table>
+      </div>
+      <button class="btn-reset" onclick="confirmReset()">Reset game</button>
+    </div>
+
+    <div id="tab-record" class="screen">
+      <div class="stat-grid">
+        <div class="stat"><div class="slbl">Kyle wins</div><div class="sval" id="r-kw">17</div><div class="ssub" id="r-kwp"></div></div>
+        <div class="stat"><div class="slbl">Nicole wins</div><div class="sval" id="r-nw">24</div><div class="ssub" id="r-nwp"></div></div>
+        <div class="stat"><div class="slbl">Kyle pts</div><div class="sval" id="r-kp">4169</div><div class="ssub">all-time</div></div>
+        <div class="stat"><div class="slbl">Nicole pts</div><div class="sval" id="r-np">3905</div><div class="ssub">all-time</div></div>
+      </div>
+      <div class="stat" style="margin-bottom:10px"><div class="slbl">Games played</div><div class="sval" id="r-gp">41</div></div>
+      <div class="stat"><div class="slbl">Overall leader</div><div class="sval" id="r-leader" style="font-size:20px;color:#047A6A">Nicole</div><div class="ssub" id="r-lead-d">24 – 17</div></div>
+    </div>
+
+    <div id="tab-history" class="screen">
+      <div class="rounds-hdr" style="display:block;margin-top:.25rem">All games</div>
+      <div style="display:flex;gap:10px;margin-bottom:.75rem;font-size:12px;font-weight:700;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#E8F8EE;border-left:3px solid #52C97A;display:inline-block"></span>Kyle won</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#FFF1E6;border-left:3px solid #F0923A;display:inline-block"></span>Nicole won</span>
+      </div>
+      <div id="game-history"></div>
+    </div>
+
+    <!-- Modals -->
+    <div class="overlay" id="dealer-modal">
+      <div class="modal">
+        <h3>Who dealt first?</h3>
+        <p>The app will automatically alternate each game after this.</p>
+        <div class="dealer-pick">
+          <button class="dp-btn" onclick="setFirstDealer('kyle')">Kyle</button>
+          <button class="dp-btn" onclick="setFirstDealer('nicole')">Nicole</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="win-modal">
+      <div class="modal">
+        <div class="m-winner" id="m-winner"></div>
+        <div class="m-sub" id="m-sub"></div>
+        <div class="m-detail" id="m-detail"></div>
+        <div class="next-dealer-note" id="next-dealer-note"></div>
+        <div class="mbtns">
+          <button class="btn-new-game" onclick="startNewGame()">New game</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="reset-modal">
+      <div class="modal">
+        <h3>Reset game?</h3>
+        <p>All rounds in this game will be cleared. Your record stays.</p>
+        <div class="mbtns">
+          <button class="btn-cancel" onclick="closeModal('reset-modal')">Cancel</button>
+          <button class="btn-danger" onclick="doReset()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
