@@ -17,7 +17,7 @@
 <div class="app">
   <div class="header"><h1>SKYJO</h1><div class="sub">Kyle vs Nicole</div></div>
   <div class="dealer-bar" id="dealer-bar">
-    <span class="dlbl">Dealer:</span><span class="dname" id="dealer-name">—</span><span class="dbadge">🃏</span>
+    <span class="dlbl">Dealer this round:</span><span class="dname" id="dealer-name">—</span><span class="dbadge">🃏</span>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="switchTab('game')">Game</div>
@@ -30,12 +30,12 @@
     <div id="tab-game" class="screen active">
       <div class="scoreboard">
         <div class="player-card selected" id="card-kyle" onclick="selectPlayer('kyle')">
-          <div class="p-name" id="pname-kyle">Kyle</div>
+          <div class="p-name">Kyle</div>
           <div class="ptotal" id="kyle-total">0</div>
           <div class="p-tag" id="kyle-tag"></div>
         </div>
         <div class="player-card" id="card-nicole" onclick="selectPlayer('nicole')">
-          <div class="p-name" id="pname-nicole">Nicole</div>
+          <div class="p-name">Nicole</div>
           <div class="ptotal" id="nicole-total">0</div>
           <div class="p-tag" id="nicole-tag"></div>
         </div>
@@ -104,11 +104,10 @@
       <div id="game-history"></div>
     </div>
 
-    <!-- Modals -->
     <div class="overlay" id="dealer-modal">
       <div class="modal">
-        <h3>Who dealt first?</h3>
-        <p>The app will automatically alternate each game after this.</p>
+        <h3>Who dealt round 1?</h3>
+        <p>The dealer will rotate every round automatically from here on.</p>
         <div class="dealer-pick">
           <button class="dp-btn" onclick="setFirstDealer('kyle')">Kyle</button>
           <button class="dp-btn" onclick="setFirstDealer('nicole')">Nicole</button>
